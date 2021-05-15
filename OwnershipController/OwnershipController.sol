@@ -72,7 +72,7 @@ contract OwnershipController is AccessControl, Ownable {
 	}
 
 	function setSwapAndLiquifyEnabled(address target, bool _enabled) public onlyRole(EXECUTOR_ROLE) {
-		IChubbyShiba(target, _enabled);
+		IChubbyShiba(target).setSwapAndLiquifyEnabled(_enabled);
 	}
 
 	function renounceTargetOwnership(address target) public virtual onlyRole(EXECUTOR_ROLE) {
