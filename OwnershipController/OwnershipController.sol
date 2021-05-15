@@ -25,6 +25,10 @@ interface IChubbyShiba {
 	function renounceOwnership() external;
 }
 
+interface IBEP20 {
+	function transfer(address recipient, uint256 amount) external;
+}
+
 // Contract to hold ownership of ChubbyShiba
 contract OwnershipController is AccessControl, Ownable {
 	bytes32 public constant EXECUTOR_ROLE = keccak256("EXECUTOR_ROLE");
@@ -44,6 +48,10 @@ contract OwnershipController is AccessControl, Ownable {
 	 * @dev Contract might receive/hold BNB
 	 */
 	receive() external payable {}
+
+	function transferTokens(address target, uint256 amount) public virtual onlyRole(EXECUTOR_ROLE) {
+		IBEP20(target).transfer(owner(), amount);
+	}
 
 	function excludeFromReward(address target, address account) public virtual onlyRole(EXECUTOR_ROLE) {
 		IChubbyShiba(target).excludeFromFee(account);
