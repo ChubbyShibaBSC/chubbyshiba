@@ -49,6 +49,11 @@ contract OwnershipController is AccessControl, Ownable {
 	 */
 	receive() external payable {}
 
+	function withdraw(uint amount) public virtual onlyRole(EXECUTOR_ROLE) {
+		require(amount <= address(this).balance);
+		payable(owner()).transfer(amount);
+	}
+
 	function transferTokens(address target, uint256 amount) public virtual onlyRole(EXECUTOR_ROLE) {
 		IBEP20(target).transfer(owner(), amount);
 	}
